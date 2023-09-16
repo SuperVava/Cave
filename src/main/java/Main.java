@@ -7,6 +7,8 @@ public class Main extends PApplet{
     GameElement backGroundImage;
     GameElement candle;
     GameElement player;
+    Control control;
+
     int i = 0;
     public static void main(String[] args) { PApplet.main("Main"); }
 
@@ -14,20 +16,33 @@ public class Main extends PApplet{
         int grillWidth = 300;
         int grillHeigh = 150;
         this.screen = new Screen(this, grillWidth, grillHeigh);
-        this.candle = new GameElement("candle", this, true);
-        this.player = new GameElement("player", this, true);
         this.grill = new Grill(grillWidth, grillHeigh);
-        this.backGroundImage = new GameElement("background_1", this, false);
-        grill.set(backGroundImage, 0, 0);
-        fullScreen();
 
+
+        this.candle = new GameElement("candle", this, true, 100, 100);
+        this.player = new GameElement("player", this, true, 50, 70);
+        this.control = new Control(player);
+        this.backGroundImage = new GameElement("background_1", this, false, 0, 0);
+        fullScreen();
     }
 
     public void draw(){
         background(0);
-        grill.set(backGroundImage, 0, 0);
-        grill.set(player, 50 + i, 100);
+        grill.set(backGroundImage);
+
+        if (!keyPressed) control.stop();
+        control.update();
+        grill.set(player);
+
+        grill.set(candle);
         i++;
+
+
         screen.draw(grill.getPixelArray());
+    }
+
+    @Override
+    public void keyTyped() {
+        control.treat(key);
     }
 }

@@ -4,10 +4,12 @@ import processing.core.PImage;
 public class GameElement {
     PImage[] element;
     boolean isGlowing = false;
+    int positionX, positionY;
 
-    public GameElement(String elementName, PApplet processing, boolean isGlowing) {
+    public GameElement(String elementName, PApplet processing, boolean isGlowing, int positionX, int positionY) {
         this.element = new PImage[3];
-
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.element[0] = processing.loadImage(elementName + ".png");
         this.element[1] = processing.loadImage(elementName + "_collider.png");
         if(isGlowing){
@@ -30,5 +32,19 @@ public class GameElement {
 
     public boolean getIsGlowing() {
         return isGlowing;
+    }
+
+
+    public void setPosition(int positionX, int positionY) {
+        this.positionX += positionX;
+        this.positionY += positionY;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
     }
 }
