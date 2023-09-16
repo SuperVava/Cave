@@ -1,15 +1,17 @@
-
+import processing.core.PApplet;
 
 public class Grill {
     Slicer slicer;
+    PApplet processing;
     int grillWidth;
     int grillHeight;
     int[][] pixelArray;
     int[] backGroundTexture;
 
-    public Grill(int grillWidth, int grillHeight) {
+    public Grill(int grillWidth, int grillHeight, PApplet processing) {
         this.grillWidth = grillWidth;
         this.grillHeight = grillHeight;
+        this.processing = processing;
         this.slicer = new Slicer(grillWidth, grillHeight);
         this.pixelArray = new int[grillWidth * grillHeight][3];
         //contient la texture en 0, la lumière en 1 et la colision en 2
@@ -31,10 +33,14 @@ public class Grill {
             int[][] shader = slicer.getSliced(element.getShader(), x - gap, y - gap);
             //ajoute la valeur de luminosité
             for (int[] ints : shader) {
-                pixelArray[ints[0]][1] = ints[1];
+                //additione les deux valeurs si les faisceaux se croisent
+
+                if(pixelArray[ints[0]][1] == 0) pixelArray[ints[0]][1] = (int) processing.brightness(ints[1]);
+                else if (processing.brightness(pixelArray[ints[0]][1]) < processing.brightness(ints[1]))
+                    pixelArray[ints[0]][1] = (int) processing.brightness(ints[1]);
+                }
             }
         }
-    }
 
     public int[][] getPixelArray() {
         return pixelArray;

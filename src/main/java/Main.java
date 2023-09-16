@@ -16,7 +16,7 @@ public class Main extends PApplet{
         int grillWidth = 300;
         int grillHeigh = 150;
         this.screen = new Screen(this, grillWidth, grillHeigh);
-        this.grill = new Grill(grillWidth, grillHeigh);
+        this.grill = new Grill(grillWidth, grillHeigh, this);
 
 
         this.candle = new GameElement("candle", this, true, 100, 100);
