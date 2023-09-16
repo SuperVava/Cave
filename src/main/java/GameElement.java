@@ -3,6 +3,7 @@ import processing.core.PImage;
 
 public class GameElement {
     PImage[] element;
+    boolean isGlowing = false;
 
     public GameElement(String elementName, PApplet processing, boolean isGlowing) {
         this.element = new PImage[3];
@@ -11,6 +12,7 @@ public class GameElement {
         this.element[1] = processing.loadImage(elementName + "_collider.png");
         if(isGlowing){
             this.element[2] = processing.loadImage("shader_100.png");
+            this.isGlowing = true;
         }
     }
 
@@ -24,5 +26,9 @@ public class GameElement {
 
     public PImage getShader(){
         return this.element[2];
+    }
+
+    public boolean getIsGlowing() {
+        return isGlowing;
     }
 }

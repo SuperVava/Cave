@@ -21,13 +21,13 @@ public class Screen {
         return pixelSize;
     }
 
-    public void draw(int[] pixelArray) {
+    public void draw(int[][] pixelArray) {
         processing.rectMode(PConstants.CORNER);
         processing.noStroke();
         processing.colorMode(PConstants.ARGB);
         for (int i = 0; i < grillHeight; i++) {
             for (int j = 0; j < grillWidth; j++) {
-                processing.fill(pixelArray[i*grillWidth + j]);
+                processing.fill(pixelArray[i*grillWidth + j][0], processing.alpha(pixelArray[i*grillWidth + j][1]));
                 processing.rect(j * pixelSize, i * pixelSize + blackScreenBandSize, pixelSize, pixelSize);
             }
         }

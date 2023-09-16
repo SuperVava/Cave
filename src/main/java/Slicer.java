@@ -20,10 +20,13 @@ public class Slicer {
         List<Integer> position = new ArrayList<Integer>();
         List<Integer> color = new ArrayList<Integer>();
 
+
         for (int i = 0; i < image.height; i++) {
             for (int j = 0; j < image.width; j++) {
                 //n'imprime que si le pixel est coloré et dans la grille
-                if (image.pixels[i * image.width + j] < 0 && x+j < grillWidth && x+j > 0) {
+                boolean onGrill = x+j < grillWidth && x+j > 0 && y + i > 0 && y+i < grillHeight;
+
+                if (image.pixels[i * image.width + j] < 0 && onGrill) {
                     //donne la position dans la grille
                     position.add((grillWidth * y + x) + j + (i*grillWidth));
                     //donne la couleur
