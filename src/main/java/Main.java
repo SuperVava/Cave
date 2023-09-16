@@ -16,7 +16,7 @@ public class Main extends PApplet{
         this.screen = new Screen(this, grillWidth, grillHeigh);
         this.candle = new GameElement("candle", this, true);
         this.player = new GameElement("player", this, true);
-        this.grill = new Grill(this, grillWidth, grillHeigh);
+        this.grill = new Grill(grillWidth, grillHeigh);
         this.backGroundImage = new GameElement("background_1", this, false);
         grill.set(backGroundImage, 0, 0);
         fullScreen();

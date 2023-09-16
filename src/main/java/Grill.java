@@ -1,21 +1,27 @@
-import processing.core.PApplet;
-import processing.core.PImage;
+
 
 public class Grill {
     Slicer slicer;
     int grillWidth;
     int grillHeight;
     int[][] pixelArray;
+    int[] backGroundTexture;
 
-    public Grill(PApplet processing, int grillWidth, int grillHeight) {
+    public Grill(int grillWidth, int grillHeight) {
         this.grillWidth = grillWidth;
         this.grillHeight = grillHeight;
-        this.slicer = new Slicer(processing, grillWidth, grillHeight);
-        this.pixelArray = new int[grillWidth * grillHeight][2];
+        this.slicer = new Slicer(grillWidth, grillHeight);
+        this.pixelArray = new int[grillWidth * grillHeight][3];
+        //contient la texture en 0, la lumière en 1 et la colision en 2
+        this.backGroundTexture = new int[grillWidth * grillHeight];
+    }
+
+    public void setBackGround (GameElement backGround){
+        set(backGround, 0, 0);
+        for(int i = 0; i <pixelArray.length; i++){
+            backGroundTexture[i] = pixelArray[i][0];
         }
-
-
-
+    }
     public void set(GameElement element, int x, int y) {
         int[][] texture = slicer.getSliced(element.getTexture(), x, y);
         //ajoute la texture à la grille

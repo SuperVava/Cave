@@ -1,16 +1,14 @@
-import processing.core.PApplet;
+
 import processing.core.PImage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Slicer {
-    PApplet processing;
     int grillWidth;
     int grillHeight;
 
-    public Slicer(PApplet processing, int grillWidth, int grillHeight) {
-        this.processing = processing;
+    public Slicer(int grillWidth, int grillHeight) {
         this.grillWidth = grillWidth;
         this.grillHeight = grillHeight;
     }
@@ -28,7 +26,7 @@ public class Slicer {
 
                 if (image.pixels[i * image.width + j] < 0 && onGrill) {
                     //donne la position dans la grille
-                    position.add((grillWidth * y + x) + j + (i*grillWidth));
+                    position.add(foundPosition(x, y, i, j));
                     //donne la couleur
                     color.add(image.pixels[i*image.width+j]);
                 }
