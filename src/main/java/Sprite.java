@@ -4,10 +4,10 @@ public class Sprite {
     GameElement[] elements;
     int counter = 0;
     int frame = 0;
-    public Sprite(String name, int numberOfFrame, PApplet processing, boolean isGlowing, String collider) {
+    public Sprite(String name, int numberOfFrame, PApplet processing, String collider) {
         elements = new GameElement[numberOfFrame];
         for(int i = 0; i< numberOfFrame; i++){
-            elements[i] = new GameElement(name + "_" + (i+1), processing, isGlowing, collider);
+            elements[i] = new GameElement(name + "_" + (i+1), processing, collider);
         }
     }
 
@@ -23,5 +23,12 @@ public class Sprite {
             frame = 0;
         }
             return elements[frame];
+    }
+
+    public void setLight(int light) {
+        for (GameElement element : elements) element.setLight(light);
+    }
+    public void setLight(String light) {
+        for (GameElement element : elements) element.setLight(light);
     }
 }

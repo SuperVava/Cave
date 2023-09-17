@@ -10,10 +10,10 @@ public class ElementType {
          -4 si il s'agit d'un projectil
          */
 
-    public static int FREE = 0;
+    public static int FOOT = -1;
     public static int WALL = -16777216;
     public static int PLAYER = -16776961;
-    public static int ENEMY = 3;
+    public static int CANDLE = -16711936;
     public static int HALF_WALL = 5;
     public static int DOOR = 6;
 }

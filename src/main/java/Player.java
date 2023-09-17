@@ -14,12 +14,16 @@ public class Player {
 
     public Player(PApplet processing, Grill grill) {
         this.grill = grill;
-        this.stand = new GameElement("player", processing, true, "player");
-        this.standBackward = new GameElement("player", processing, true, "player");
+        this.stand = new GameElement("player", processing, "player");
+        stand.setLight(2);
+        this.standBackward = new GameElement("player", processing, "player");
         standBackward.flip();
-        this.walkSprite = new Sprite("player_walk", 8, processing, true,"player");
-        this.walkBackwardSprite = new Sprite("player_walk", 8, processing, true, "player");
+        standBackward.setLight(2);
+        this.walkSprite = new Sprite("player_walk", 8, processing,"player");
+        walkSprite.setLight(2);
+        this.walkBackwardSprite = new Sprite("player_walk", 8, processing, "player");
         walkBackwardSprite.flip();
+        walkBackwardSprite.setLight(2);
         this.control = new Control(this);
     }
 
@@ -33,6 +37,7 @@ public class Player {
         try{grill.tryCollision(stand, positionX + x, positionY + y);}
         catch (Collision colision){
             if(colision.getType() == ElementType.WALL) isWalking = false;
+            if(colision.getType() == ElementType.CANDLE) turnOn();
         }
 
         if(isWalking) {
@@ -65,5 +70,19 @@ public class Player {
 
     public void treat(char key) {
         control.treat(key);
+    }
+
+    public void turnOff(){
+        stand.setLight("player");
+        standBackward.setLight("player_reversed");
+        walkSprite.setLight("player");
+        walkBackwardSprite.setLight("player_reversed");
+    }
+
+    public void turnOn(){
+        stand.setLight(2);
+        standBackward.setLight(2);
+        walkSprite.setLight(2);
+        walkBackwardSprite.setLight(2);
     }
 }

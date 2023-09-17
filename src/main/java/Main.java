@@ -5,7 +5,6 @@ public class Main extends PApplet{
     Screen screen;
     Grill grill;
     BackGroundElement backGroundElement;
-    GameElement candle;
     Player player;
     int grillWidth = 300;
     int grillHeigh = 150;
@@ -26,6 +25,7 @@ public class Main extends PApplet{
     public void draw(){
         background(0);
         backGroundElement.set(player.getPositionX(), key, keyPressed);
+
         if(keyPressed) player.treat(key);
         player.set();
 

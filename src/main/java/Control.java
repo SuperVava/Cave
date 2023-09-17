@@ -18,6 +18,7 @@ public class Control {
             player.move(+1, 0);
         }
         if(key == ' '){
+            player.turnOff();
         }
     }
 }

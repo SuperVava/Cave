@@ -4,8 +4,12 @@ public class CollisionController {
 
 
     public static void testForCollision(int oldType, int newType) throws Collision {
-        if (oldType == ElementType.WALL && newType == ElementType.WALL) {
+        //System.out.println(oldType);
+        if (oldType == ElementType.WALL && newType == ElementType.FOOT) {
             throw new Collision(ElementType.WALL);
+        }
+        if (oldType == ElementType.CANDLE && newType == ElementType.PLAYER) {
+            throw new Collision(ElementType.CANDLE);
         }
     }
 }
