@@ -1,7 +1,7 @@
 public class Control {
-    GameElement player;
+    Player player;
     char key;
-    public Control(GameElement player) {
+    public Control(Player player) {
         this.player = player;
         this.key = '*';
     }
@@ -14,16 +14,16 @@ public class Control {
 
     public void update(){
         if(key == 'z'){
-            player.setPosition(0, -1);
+            player.move(0, -1);
         }
         if(key == 'q'){
-            player.setPosition(-1, 0);
+            player.move(-1, 0);
         }
         if(key == 's'){
-            player.setPosition(0, +1);
+            player.move(0, +1);
         }
         if(key == 'd'){
-            player.setPosition(+1, 0);
+            player.move(+1, 0);
         }
         if(key == ' '){
         }

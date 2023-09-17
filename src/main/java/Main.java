@@ -6,7 +6,7 @@ public class Main extends PApplet{
     Grill grill;
     GameElement backGroundImage;
     GameElement candle;
-    GameElement player;
+    Player player;
     Control control;
 
     int i = 0;
@@ -19,10 +19,12 @@ public class Main extends PApplet{
         this.grill = new Grill(grillWidth, grillHeigh, this);
 
 
-        this.candle = new GameElement("candle", this, true, 100, 100);
-        this.player = new GameElement("player", this, true, 50, 70);
+        this.candle = new GameElement("candle", this, true);
+        this.player = new Player(this);
+        player.set(50, 50);
         this.control = new Control(player);
-        this.backGroundImage = new GameElement("background_1", this, false, 0, 0);
+        this.backGroundImage = new GameElement("background_1", this, false);
+        backGroundImage.setPosition(0,0);
         fullScreen();
     }
 
@@ -32,7 +34,7 @@ public class Main extends PApplet{
 
         if (!keyPressed) control.stop();
         control.update();
-        grill.set(player);
+        grill.set(player.getGameElement());
 
         grill.set(candle);
         i++;
