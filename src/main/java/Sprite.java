@@ -4,10 +4,10 @@ public class Sprite {
     GameElement[] elements;
     int counter = 0;
     int frame = 0;
-    public Sprite(String name, int numberOfFrame, PApplet processing, boolean isGlowing) {
+    public Sprite(String name, int numberOfFrame, PApplet processing, boolean isGlowing, String collider) {
         elements = new GameElement[numberOfFrame];
         for(int i = 0; i< numberOfFrame; i++){
-            elements[i] = new GameElement(name + "_" + (i+1), processing, isGlowing);
+            elements[i] = new GameElement(name + "_" + (i+1), processing, isGlowing, collider);
         }
     }
 
@@ -18,15 +18,10 @@ public class Sprite {
     public GameElement getElement() {
         counter +=1;
         frame = counter / 10;
-        try{return elements[frame];}
-        catch (Exception exception){
+        if(frame >= elements.length){
             counter = 0;
             frame = 0;
-            return elements[0];
         }
-    }
-
-    public void setPosition(int positionX, int positionY) {
-        elements[frame].setPosition(positionX, positionY);
+            return elements[frame];
     }
 }

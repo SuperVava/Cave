@@ -18,9 +18,7 @@ public class Grill {
         this.backGroundTexture = new int[grillWidth * grillHeight];
     }
 
-    public void set(GameElement element) {
-        int x = element.getPositionX();
-        int y = element.getPositionY();
+    public void set(GameElement element, int x, int y) {
         int[][] texture = slicer.getSliced(element.getTexture(), x, y);
         //ajoute la texture à la grille
         for (int[] ints : texture) {

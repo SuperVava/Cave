@@ -5,10 +5,9 @@ import processing.core.PImage;
 public class GameElement {
     PImage[] element;
     boolean isGlowing = false;
-    int positionX, positionY;
     PApplet processing;
 
-    public GameElement(String elementName, PApplet processing, boolean isGlowing) {
+    public GameElement(String elementName, PApplet processing, boolean isGlowing, String collider) {
         this.element = new PImage[3];
         this.processing = processing;
         this.element[0] = processing.loadImage(elementName + ".png");
@@ -16,7 +15,7 @@ public class GameElement {
             this.element[1] = processing.loadImage("shader_100.png");
             this.isGlowing = true;
         }
-        this.element[2] = processing.loadImage(elementName + "_collider.png");
+        this.element[2] = processing.loadImage(collider + "_collider.png");
     }
 
     public PImage getTexture(){
@@ -33,20 +32,6 @@ public class GameElement {
 
     public boolean getIsGlowing() {
         return isGlowing;
-    }
-
-
-    public void setPosition(int positionX, int positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
-    }
-
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
     }
 
     public void flip() {

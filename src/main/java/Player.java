@@ -7,22 +7,25 @@ public class Player {
     Sprite walkSprite;
     Sprite walkBackwardSprite;
     boolean isWalking = false;
+    int positionX, positionY;
 
     public Player(PApplet processing) {
-        this.stand = new GameElement("player", processing, true);
-        this.standBackward = new GameElement("player", processing, true);
+        this.stand = new GameElement("player", processing, true, "player");
+        this.standBackward = new GameElement("player", processing, true, "player");
         standBackward.flip();
-        this.walkSprite = new Sprite("player_walk", 3, processing, true);
-        this.walkBackwardSprite = new Sprite("player_walk", 3, processing, true);
+        this.walkSprite = new Sprite("player_walk", 8, processing, true,"player");
+        this.walkBackwardSprite = new Sprite("player_walk", 8, processing, true, "player");
         walkBackwardSprite.flip();
     }
 
     public void set(int x, int y){
-        stand.setPosition(x, y);
+        positionX = x;
+        positionY = y;
     }
 
     public void move(int x, int y) {
-        stand.setPosition(stand.getPositionX() + x, stand.getPositionY() + y);
+        positionX += x;
+        positionY += y;
         if(x<0) isFlipped = true;
         if(x>0) isFlipped = false;
         isWalking = true;
@@ -30,8 +33,6 @@ public class Player {
 
     public GameElement getGameElement() {
         if(isFlipped) {
-            standBackward.setPosition(stand.getPositionX(), stand.getPositionY());
-            walkBackwardSprite.setPosition(stand.getPositionX(), stand.getPositionY());
             if(isWalking) {
                 isWalking = false;
                 return walkBackwardSprite.getElement();
@@ -40,9 +41,16 @@ public class Player {
         }
         else if(isWalking) {
             isWalking = false;
-            walkSprite.setPosition(stand.getPositionX(), stand.getPositionY());
             return walkSprite.getElement();
         }
         else return stand;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
     }
 }
