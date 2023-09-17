@@ -4,7 +4,7 @@ public class Main extends PApplet{
 
     Screen screen;
     Grill grill;
-    GameElement backGroundImage;
+    BackGroundElement backGroundElement;
     GameElement candle;
     Player player;
     int grillWidth = 300;
@@ -19,17 +19,16 @@ public class Main extends PApplet{
 
         this.player = new Player(this, grill);
         player.setPosition(50, 50);
-        this.backGroundImage = new GameElement("background_1", this, false, "background_1");
+        this.backGroundElement = new BackGroundElement(this, grill, grillWidth);
         fullScreen();
     }
 
     public void draw(){
         background(0);
-        grill.set(backGroundImage, i, 0);
+        backGroundElement.set(player.getPositionX(), key, keyPressed);
         if(keyPressed) player.treat(key);
         player.set();
-        if(player.getPositionX() == 230 && key == 'd' && keyPressed && i<backGroundImage.getTexture().width - grillWidth) i--;
-        if(player.getPositionX() == 23 && key == 'q' && keyPressed && i != 0) i++;
+
 
         screen.draw(grill.getPixelArray());
     }

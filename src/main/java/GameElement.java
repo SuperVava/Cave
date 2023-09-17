@@ -34,6 +34,10 @@ public class GameElement {
         return isGlowing;
     }
 
+    public void setGlowing(boolean glowing) {
+        isGlowing = glowing;
+    }
+
     public void flip() {
         //j'ai volé ça sur stackOverflow
         PImage flipped = processing.createImage(element[0].width,element[0].height, PConstants.RGB); //create a new image with the same dimensions
