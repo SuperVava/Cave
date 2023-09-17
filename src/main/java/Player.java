@@ -36,7 +36,7 @@ public class Player {
         }
 
         if(isWalking) {
-            if((positionX < 230 || x < 0) && (positionX > 20 || x > 0)) positionX += x;
+            if((positionX < 230 || x < 0) && (positionX > 23 || x > 0)) positionX += x;
             positionY += y;
             if (x < 0) isFlipped = true;
             if (x > 0) isFlipped = false;
@@ -52,7 +52,6 @@ public class Player {
         else currentPosition = stand;
 
         isWalking = false;
-
         grill.set(currentPosition, positionX, positionY);
     }
 

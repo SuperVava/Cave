@@ -29,7 +29,7 @@ public class Main extends PApplet{
         if(keyPressed) player.treat(key);
         player.set();
         if(player.getPositionX() == 230 && key == 'd' && keyPressed && i<backGroundImage.getTexture().width - grillWidth) i--;
-        if(player.getPositionX() == 20 && key == 'q' && keyPressed && i != 0) i++;
+        if(player.getPositionX() == 23 && key == 'q' && keyPressed && i != 0) i++;
 
         screen.draw(grill.getPixelArray());
     }
