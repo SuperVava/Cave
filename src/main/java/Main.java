@@ -20,8 +20,8 @@ public class Main extends PApplet{
 
 
         this.candle = new GameElement("candle", this, true, "candle");
-        this.player = new Player(this);
-        player.set(50, 50);
+        this.player = new Player(this, grill);
+        player.setPosition(50, 50);
         this.control = new Control(player);
         this.backGroundImage = new GameElement("background_1", this, false, "background_1");
         fullScreen();
@@ -33,7 +33,7 @@ public class Main extends PApplet{
 
         if (!keyPressed) control.stop();
         control.update();
-        grill.set(player.getGameElement(), player.getPositionX(), player.getPositionY());
+        player.set();
 
         grill.set(candle, 100, 100);
         i++;

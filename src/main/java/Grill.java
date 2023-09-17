@@ -1,3 +1,4 @@
+import Exeption.Collision;
 import processing.core.PApplet;
 
 public class Grill {
@@ -18,13 +19,22 @@ public class Grill {
         this.backGroundTexture = new int[grillWidth * grillHeight];
     }
 
-    public void set(GameElement element, int x, int y) {
+    public void set(GameElement element, int x, int y)  {
+
+        int[][] collider = slicer.getSliced(element.getCollider(), x, y);
+        //ajoute le collider
+        for (int[] ints : collider) {
+            pixelArray[ints[0]][2] = ints[1];
+        }
+
+
         int[][] texture = slicer.getSliced(element.getTexture(), x, y);
         //ajoute la texture à la grille
         for (int[] ints : texture) {
             pixelArray[ints[0]][0] = ints[1];
             pixelArray[ints[0]][1] = 0;
         }
+
         if(element.getIsGlowing()){
             //décalage du shader comparée à la texture
             int gap = (element.getShader().width/2) - (element.getTexture().width / 2);
@@ -42,5 +52,13 @@ public class Grill {
 
     public int[][] getPixelArray() {
         return pixelArray;
+    }
+    public void tryCollision(GameElement element, int x, int y) throws Collision {
+        int[][] collider = slicer.getSliced(element.getCollider(), x, y);
+        //test chaque pixels
+        for (int[] ints : collider) {
+            System.out.println(ints[1]);
+            CollisionController.testForCollision(pixelArray[ints[0]][2], ints[1]);
+        }
     }
 }

@@ -1,9 +1,9 @@
 package Exeption;
 
-public class Colision extends Exception{
-    private int type;
+public class Collision extends Exception{
+    private final int type;
 
-    public Colision(int type) {
+    public Collision(int type) {
         this.type = type;
     }
 
