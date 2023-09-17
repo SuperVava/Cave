@@ -1,4 +1,4 @@
-import Exeption.Collision;
+import Exeptions.Collision;
 import processing.core.PApplet;
 
 public class Player {
@@ -10,6 +10,7 @@ public class Player {
     boolean isWalking = false;
     int positionX, positionY;
     Grill grill;
+    Control control;
 
     public Player(PApplet processing, Grill grill) {
         this.grill = grill;
@@ -19,6 +20,7 @@ public class Player {
         this.walkSprite = new Sprite("player_walk", 8, processing, true,"player");
         this.walkBackwardSprite = new Sprite("player_walk", 8, processing, true, "player");
         walkBackwardSprite.flip();
+        this.control = new Control(this);
     }
 
     public void setPosition(int x, int y){
@@ -34,7 +36,7 @@ public class Player {
         }
 
         if(isWalking) {
-            positionX += x;
+            if((positionX < 230 || x < 0) && (positionX > 20 || x > 0)) positionX += x;
             positionY += y;
             if (x < 0) isFlipped = true;
             if (x > 0) isFlipped = false;
@@ -60,5 +62,9 @@ public class Player {
 
     public int getPositionY() {
         return positionY;
+    }
+
+    public void treat(char key) {
+        control.treat(key);
     }
 }

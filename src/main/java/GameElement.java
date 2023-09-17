@@ -46,16 +46,5 @@ public class GameElement {
         //y*width+x is to convert from x,y to pixel array index
         flipped.updatePixels();
         element[0] = flipped;
-
-        PImage colliderFlipped = processing.createImage(element[0].width,element[0].height, PConstants.RGB); //create a new image with the same dimensions
-        for(int i = 0 ; i < colliderFlipped.pixels.length; i++){       //loop through each pixel
-            int srcX = i % colliderFlipped.width;                        //calculate source(original) x position
-            int dstX = colliderFlipped.width-srcX-1;                     //calculate destination(flipped) x position = (maximum-x-1)
-            int y    = i / colliderFlipped.width;                        //calculate y coordinate
-            colliderFlipped.pixels[y*colliderFlipped.width+dstX] = element[0].pixels[i];//write the destination(x flipped) pixel based on the current pixel
-        }
-        //y*width+x is to convert from x,y to pixel array index
-        colliderFlipped.updatePixels();
-        element[2] = colliderFlipped;
     }
 }

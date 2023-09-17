@@ -1,4 +1,4 @@
-package Exeption;
+package Exeptions;
 
 public class Collision extends Exception{
     private final int type;

@@ -1,18 +1,10 @@
 public class Control {
     Player player;
-    char key;
     public Control(Player player) {
         this.player = player;
-        this.key = '*';
     }
 
-    public void treat(char key) { this.key = key; }
-
-    public void stop() {
-        key = '*';
-    }
-
-    public void update(){
+    public void treat(char key){
         if(key == 'z'){
             player.move(0, -1);
         }

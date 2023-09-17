@@ -1,4 +1,4 @@
-import Exeption.Collision;
+import Exeptions.Collision;
 import processing.core.PApplet;
 
 public class Grill {
@@ -57,7 +57,6 @@ public class Grill {
         int[][] collider = slicer.getSliced(element.getCollider(), x, y);
         //test chaque pixels
         for (int[] ints : collider) {
-            System.out.println(ints[1]);
             CollisionController.testForCollision(pixelArray[ints[0]][2], ints[1]);
         }
     }
