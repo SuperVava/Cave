@@ -34,7 +34,7 @@ public class Sprite {
         }
     }
 
-    public PImage getFrame(boolean isFlipped) {
+    public PImage getPicture(boolean isFlipped) {
         counter +=1;
         frame = counter / 10;
         if(frame >= frames.length){
@@ -43,5 +43,9 @@ public class Sprite {
         }
             if(!isFlipped) return frames[frame];
             else return flippedFrames[frame];
+    }
+
+    public boolean isFinish() {
+        return frames.length == (counter+1) / 10;
     }
 }

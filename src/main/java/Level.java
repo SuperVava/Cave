@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Level {
     private final Player player;
@@ -22,7 +21,7 @@ public class Level {
     public Level(PApplet processing, Grill grill, String levelName) {
         this.processing = processing;
         this.grill = grill;
-        this.death = new Sprite("hole_1_death", 4, processing);
+        this.death = new Sprite("hole_1_death", 5, processing);
         try {
             FileInputStream loadSave = new FileInputStream(levelName);
             ObjectInputStream list = new ObjectInputStream(loadSave);
@@ -46,7 +45,6 @@ public class Level {
     }
 
     public void set(char key, boolean keyPressed) {
-        if(keyPressed) player.treat(key);
 
         if(player.getPositionX() == 230 && key == 'd' && keyPressed && positionX< backGround.getTexture().width - grill.getGrillWidth()) {
             positionX--;
@@ -73,17 +71,19 @@ public class Level {
                 if(element.getIsGlowing()) grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
                 grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
             } catch (Collision collision) {
-                if(collision.getType() == ElementType.HOLE){
-                    grill.setTexture(death.getFrame(false), element.getPositionX(), element.getPositionY());
-                    grill.setShader(player.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
+                if(collision.getType() == ElementType.FOOT && !death.isFinish()){
+                    grill.setTexture(death.getPicture(false), element.getPositionX(), element.getPositionY());
+                    grill.setShader(processing.loadImage("Shader_100.png"), element.getTexture(), element.getPositionX(), element.getPositionY());
                 }
             }
         }
 
         if(player.isAlive()) {
+            if(keyPressed) player.treat(key);
             grill.setTexture(player.getTexture(), player.getPositionX(), player.getPositionY());
             grill.setShader(player.getShader(), player.getTexture(), player.getPositionX(), player.getPositionY());
             grill.setCollider(player.getCollider(), player.getPositionX(), player.getPositionY());
         }
+
     }
 }

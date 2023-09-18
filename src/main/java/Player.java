@@ -43,7 +43,7 @@ public class Player {
     public PImage getTexture() {
         element.setFlipped(isFlipped);
         PImage currentPosition;
-        if(isWalking) currentPosition= walkSprite.getFrame(isFlipped);
+        if(isWalking) currentPosition= walkSprite.getPicture(isFlipped);
         else currentPosition = element.getTexture();
 
         isWalking = false;

@@ -14,5 +14,8 @@ public class CollisionController {
         if (oldType == ElementType.HOLE && newType == ElementType.FOOT) {
             throw new Collision(ElementType.HOLE);
         }
+        if (oldType == ElementType.FOOT && newType == ElementType.HOLE) {
+            throw new Collision(ElementType.FOOT);
+        }
     }
 }
