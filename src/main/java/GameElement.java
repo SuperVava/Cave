@@ -2,18 +2,29 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 
-public class GameElement {
-    PImage[] element;
-    boolean isGlowing = false;
-    PApplet processing;
-    String elementName;
+import java.io.Serializable;
 
-    public GameElement(String elementName, PApplet processing, String collider) {
-        this.element = new PImage[3];
-        this.processing = processing;
+public class GameElement implements Serializable {
+    private int positionX;
+    private int positionY;
+    transient PImage[] element;
+    boolean isGlowing = false;
+    transient PApplet processing;
+    String elementName;
+    boolean isFlipped;
+
+    public GameElement(String elementName, int positionX, int positionY) {
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.elementName = elementName;
+    }
+
+    public void generate(PApplet processing){
+        //0:texture 1:shader 2:collider 3:flippedTexture 4:flippedShader 5flippedCollider
+        this.processing = processing;
+        this.element = new PImage[6];
         this.element[0] = processing.loadImage(elementName + ".png");
-        this.element[2] = processing.loadImage(collider + "_collider.png");
+        this.element[2] = processing.loadImage(elementName + "_collider.png");
     }
 
     public void setLight(int glowLevel){
@@ -31,35 +42,61 @@ public class GameElement {
     }
     public void setLight(String shader) {
         element[1] = processing.loadImage(shader + "_shader.png");
+        flip();
     }
 
     public PImage getTexture(){
-        return this.element[0];
-    }
-
-    public PImage getCollider(){
-        return this.element[2];
+        if(!isFlipped)return this.element[0];
+        else return this.element[3];
     }
 
     public PImage getShader(){
-        return this.element[1];
+        if(!isFlipped)return this.element[1];
+        else return this.element[4];
+    }
+
+    public PImage getCollider(){
+        if(!isFlipped)return this.element[2];
+        else return this.element[5];
+    }
+
+    public void setFlipped(boolean flipped) {
+        isFlipped = flipped;
     }
 
     public boolean getIsGlowing() {
         return isGlowing;
     }
 
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionX(int positionX){
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
     public void flip() {
         //j'ai volé ça sur stackOverflow
-        PImage flipped = processing.createImage(element[0].width, element[0].height, PConstants.RGB); //create a new image with the same dimensions
-        for (int i = 0; i < flipped.pixels.length; i++) {       //loop through each pixel
-            int srcX = i % flipped.width;                        //calculate source(original) x position
-            int dstX = flipped.width - srcX - 1;                     //calculate destination(flipped) x position = (maximum-x-1)
-            int y = i / flipped.width;                        //calculate y coordinate
-            flipped.pixels[y * flipped.width + dstX] = element[0].pixels[i];//write the destination(x flipped) pixel based on the current pixel
+        for(int i = 0; i < 3; i++) {
+            PImage flipped = processing.createImage(element[i].width, element[i].height, PConstants.RGB); //create a new image with the same dimensions
+            for (int j = 0; j < flipped.pixels.length; j++) {       //loop through each pixel
+                int srcX = j % flipped.width;                        //calculate source(original) x position
+                int dstX = flipped.width - srcX - 1;                     //calculate destination(flipped) x position = (maximum-x-1)
+                int y = j / flipped.width;                        //calculate y coordinate
+                flipped.pixels[y * flipped.width + dstX] = element[i].pixels[j];//write the destination(x flipped) pixel based on the current pixel
+            }
+            //y*width+x is to convert from x,y to pixel array index
+            flipped.updatePixels();
+            this.element[3 + i] = flipped;
         }
-        //y*width+x is to convert from x,y to pixel array index
-        flipped.updatePixels();
-        element[0] = flipped;
     }
 }

@@ -4,8 +4,7 @@ public class Main extends PApplet{
 
     Screen screen;
     Grill grill;
-    BackGroundElement backGroundElement;
-    Player player;
+    Level level;
     int grillWidth = 300;
     int grillHeigh = 150;
 
@@ -15,20 +14,15 @@ public class Main extends PApplet{
     public void settings() {
         this.screen = new Screen(this, grillWidth, grillHeigh);
         this.grill = new Grill(grillWidth, grillHeigh, this);
-
-        this.player = new Player(this, grill);
-        player.setPosition(50, 50);
-        this.backGroundElement = new BackGroundElement(this, grill, grillWidth);
+        this.level = new Level(this, grill, "level_1");
         fullScreen();
     }
 
     public void draw(){
         background(0);
-        backGroundElement.set(player.getPositionX(), key, keyPressed);
+        grill.clearLight();
 
-        if(keyPressed) player.treat(key);
-        player.set();
-
+        level.set(key, keyPressed);
 
         screen.draw(grill.getPixelArray());
     }

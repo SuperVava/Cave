@@ -11,5 +11,8 @@ public class CollisionController {
         if (oldType == ElementType.CANDLE && newType == ElementType.PLAYER) {
             throw new Collision(ElementType.CANDLE);
         }
+        if (oldType == ElementType.HOLE && newType == ElementType.FOOT) {
+            throw new Collision(ElementType.HOLE);
+        }
     }
 }

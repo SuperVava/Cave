@@ -14,6 +14,6 @@ public class ElementType {
     public static int WALL = -16777216;
     public static int PLAYER = -16776961;
     public static int CANDLE = -16711936;
-    public static int HALF_WALL = 5;
+    public static int HOLE = -256;
     public static int DOOR = 6;
 }
