@@ -16,4 +16,6 @@ public class ElementType {
     public static String CANDLE = "FF00FF00";
     public static String HOLE = "FFFFFF00";
     public static String CRATE = "FFFF00FF";
+    public static String CANDLEOFF = "FFFF7800";
+    public static String FLAME = "FFFFFA22";
 }

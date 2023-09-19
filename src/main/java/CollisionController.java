@@ -6,19 +6,22 @@ public class CollisionController {
     public static void testForCollision(String oldType, String newType) throws Collision {
         //System.out.println(oldType);
         if (oldType.equals(ElementType.WALL) && newType.equals(ElementType.FOOT)) {
-            throw new Collision(ElementType.WALL);
+            throw new Collision("wall");
         }
-        if (oldType.equals(ElementType.CANDLE) && newType.equals(ElementType.PLAYER)) {
-            throw new Collision(ElementType.CANDLE);
+        if (oldType.equals(ElementType.FLAME) && newType.equals(ElementType.PLAYER)) {
+            throw new Collision("light");
         }
-        if (oldType.equals(ElementType.PLAYER) && newType.equals(ElementType.CANDLE)) {
-            throw new Collision(ElementType.CANDLE);
+        if (oldType.equals(ElementType.PLAYER) && newType.equals(ElementType.CANDLEOFF)) {
+            throw new Collision("light");
         }
         if (oldType.equals(ElementType.HOLE) && newType.equals(ElementType.FOOT)) {
-            throw new Collision(ElementType.HOLE);
+            throw new Collision("fall");
         }
         if (oldType.equals(ElementType.FOOT) && newType.equals(ElementType.HOLE)) {
-            throw new Collision(ElementType.FOOT);
+            throw new Collision("fall");
+        }
+        if (oldType.equals(ElementType.PLAYER) && (newType.equals(ElementType.CRATE) || newType.equals(ElementType.CANDLE))) {
+            throw new Collision("hide");
         }
     }
 }

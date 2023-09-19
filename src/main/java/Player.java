@@ -28,10 +28,10 @@ public class Player {
     public void move(int x, int y) {
         isWalking = true;
         try{grill.tryCollision(element, element.getPositionX() + x, element.getPositionY() + y);}
-        catch (Collision colision){
-            if(colision.getType().equals(ElementType.WALL)) isWalking = false;
-            if(colision.getType().equals(ElementType.CANDLE)) turnOn();
-            if(colision.getType().equals(ElementType.HOLE)) kill();
+        catch (Collision collision){
+            System.out.println(collision.getType());
+            if(collision.getType().equals("wall")) isWalking = false;
+            if(collision.getType().equals("light")) turnOn();
         }
 
         if(isWalking) {
