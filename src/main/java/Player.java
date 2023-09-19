@@ -10,12 +10,14 @@ public class Player {
     Grill grill;
     Control control;
     private boolean isAlive = true;
+    boolean isLighted;
 
     public Player(PApplet processing, Grill grill, int positionX, int positionY) {
         this.grill = grill;
         this.element = new GameElement("player", ElementType.PLAYER, positionX, positionY);
         element.generate(processing);
         element.setLight(2);
+        isLighted = true;
         element.flip();
         this.walkSprite = new Sprite("player_walk", processing);
         walkSprite.flip();
@@ -67,16 +69,24 @@ public class Player {
         return element.getPositionY();
     }
 
+
+
     public void treat(char key) {
         control.treat(key);
     }
 
     public void turnOff(){
         element.setLight("player");
+        isLighted = false;
     }
 
     public void turnOn(){
         element.setLight(2);
+        isLighted = true;
+    }
+
+    public boolean isLighted() {
+        return isLighted;
     }
 
     public void kill(){

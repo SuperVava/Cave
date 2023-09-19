@@ -35,10 +35,12 @@ public class GameElement implements Serializable {
         }
         if(glowLevel == 1){
             element[1] = processing.loadImage("shader_50.png");
+            element[4] = processing.loadImage("shader_50.png");
             isGlowing = true;
         }
         if(glowLevel == 2){
             element[1] = processing.loadImage("shader_100.png");
+            element[4] = processing.loadImage("shader_100.png");
             isGlowing = true;
         }
     }
