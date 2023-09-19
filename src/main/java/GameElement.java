@@ -12,11 +12,13 @@ public class GameElement implements Serializable {
     transient PApplet processing;
     String elementName;
     boolean isFlipped;
+    String type;
 
-    public GameElement(String elementName, int positionX, int positionY) {
+    public GameElement(String elementName, String type, int positionX, int positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.elementName = elementName;
+        this.type = type;
     }
 
     public void generate(PApplet processing){
@@ -82,6 +84,10 @@ public class GameElement implements Serializable {
 
     public void setPositionY(int positionY) {
         this.positionY = positionY;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void flip() {

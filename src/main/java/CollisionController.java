@@ -3,18 +3,18 @@ import Exeptions.Collision;
 public class CollisionController {
 
 
-    public static void testForCollision(int oldType, int newType) throws Collision {
-        //System.out.println(oldType);
-        if (oldType == ElementType.WALL && newType == ElementType.FOOT) {
+    public static void testForCollision(String oldType, String newType) throws Collision {
+        System.out.println(oldType);
+        if (oldType.equals(ElementType.WALL) && newType.equals(ElementType.FOOT)) {
             throw new Collision(ElementType.WALL);
         }
-        if (oldType == ElementType.CANDLE && newType == ElementType.PLAYER) {
+        if (oldType.equals(ElementType.CANDLE) && newType.equals(ElementType.PLAYER)) {
             throw new Collision(ElementType.CANDLE);
         }
-        if (oldType == ElementType.HOLE && newType == ElementType.FOOT) {
+        if (oldType.equals(ElementType.HOLE) && newType.equals(ElementType.FOOT)) {
             throw new Collision(ElementType.HOLE);
         }
-        if (oldType == ElementType.FOOT && newType == ElementType.HOLE) {
+        if (oldType.equals(ElementType.FOOT) && newType.equals(ElementType.HOLE)) {
             throw new Collision(ElementType.FOOT);
         }
     }

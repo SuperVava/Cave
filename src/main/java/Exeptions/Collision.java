@@ -1,13 +1,13 @@
 package Exeptions;
 
 public class Collision extends Exception{
-    private final int type;
+    private final String type;
 
-    public Collision(int type) {
+    public Collision(String type) {
         this.type = type;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 

@@ -13,11 +13,11 @@ public class Player {
 
     public Player(PApplet processing, Grill grill, int positionX, int positionY) {
         this.grill = grill;
-        this.element = new GameElement("player", positionX, positionY);
+        this.element = new GameElement("player", ElementType.PLAYER, positionX, positionY);
         element.generate(processing);
         element.setLight(2);
         element.flip();
-        this.walkSprite = new Sprite("player_walk", 8, processing);
+        this.walkSprite = new Sprite("player_walk", processing);
         walkSprite.flip();
         this.control = new Control(this);
     }
@@ -27,9 +27,9 @@ public class Player {
         isWalking = true;
         try{grill.tryCollision(element, element.getPositionX() + x, element.getPositionY() + y);}
         catch (Collision colision){
-            if(colision.getType() == ElementType.WALL) isWalking = false;
-            if(colision.getType() == ElementType.CANDLE) turnOn();
-            if(colision.getType() == ElementType.HOLE) kill();
+            if(colision.getType().equals(ElementType.WALL)) isWalking = false;
+            if(colision.getType().equals(ElementType.CANDLE)) turnOn();
+            if(colision.getType().equals(ElementType.HOLE)) kill();
         }
 
         if(isWalking) {

@@ -10,10 +10,10 @@ public class ElementType {
          -4 si il s'agit d'un projectil
          */
 
-    public static int FOOT = -1;
-    public static int WALL = -16777216;
-    public static int PLAYER = -16776961;
-    public static int CANDLE = -16711936;
-    public static int HOLE = -256;
-    public static int DOOR = 6;
+    public static String FOOT = "FFFFFFFF";
+    public static String WALL = "FF000000";
+    public static String PLAYER = "FF0000FF";
+    public static String CANDLE = "FF00FF00";
+    public static String HOLE = "FFFFFF00";
+    public static String CRATE = "FFFF00FF";
 }

@@ -62,7 +62,7 @@ public class Grill {
         int[][] collider = slicer.getSliced(element.getCollider(), x, y);
         //test chaque pixels
         for (int[] ints : collider) {
-            CollisionController.testForCollision(pixelArray[ints[0]][2], ints[1]);
+            CollisionController.testForCollision(PApplet.hex(pixelArray[ints[0]][2]), PApplet.hex(ints[1]));
         }
     }
 

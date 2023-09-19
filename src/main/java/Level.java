@@ -21,7 +21,7 @@ public class Level {
     public Level(PApplet processing, Grill grill, String levelName) {
         this.processing = processing;
         this.grill = grill;
-        this.death = new Sprite("hole_1_death", 5, processing);
+        this.death = new Sprite("hole_1_death", processing);
         try {
             FileInputStream loadSave = new FileInputStream(levelName);
             ObjectInputStream list = new ObjectInputStream(loadSave);
@@ -34,7 +34,7 @@ public class Level {
             e.printStackTrace();
         }
 
-        this.player = new Player(processing, grill, 100, 100);
+        this.player = new Player(processing, grill, 50, 70);
 
         for(GameElement element : elements){
             element.generate(processing);
@@ -71,7 +71,7 @@ public class Level {
                 if(element.getIsGlowing()) grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
                 grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
             } catch (Collision collision) {
-                if(collision.getType() == ElementType.FOOT && !death.isFinish()){
+                if(collision.getType() == (ElementType.FOOT) && !death.isFinish()){
                     grill.setTexture(death.getPicture(false), element.getPositionX(), element.getPositionY());
                     grill.setShader(processing.loadImage("Shader_100.png"), element.getTexture(), element.getPositionX(), element.getPositionY());
                 }

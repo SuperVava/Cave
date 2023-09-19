@@ -9,12 +9,21 @@ public class Sprite {
     int counter = 0;
     int frame = 0;
 
-    public Sprite(String name, int numberOfFrame, PApplet processing) {
+    public Sprite(String name, PApplet processing) {
         this.processing = processing;
+        PImage texture = processing.loadImage(name + "_sprite.png");
+        int numberOfFrame = texture.width / texture.height;
         frames = new PImage[numberOfFrame];
         flippedFrames = new PImage[numberOfFrame];
-        for(int i = 1; i<= numberOfFrame; i++){
-            frames[i - 1] = processing.loadImage(name + "_" + i +".png");
+        for(int i = 0; i < numberOfFrame; i++){
+            PImage newFrame = processing.createImage(texture.height, texture.height, PConstants.RGB);
+            for (int j = 0; j < newFrame.height; j++) {
+                for (int k = 0; k < newFrame.width; k++) {  //loop through each pixel
+                    newFrame.pixels[j * newFrame.width + k] = texture.pixels[j*texture.width + i*newFrame.width + k];
+                }
+            }
+            newFrame.updatePixels();
+            frames[i] = newFrame;
         }
     }
 
