@@ -18,4 +18,5 @@ public class ElementType {
     public static String CRATE = "FFFF00FF";
     public static String CANDLEOFF = "FFFF7800";
     public static String FLAME = "FFFFFA22";
+    public static String WOLF = "FFFF0000";
 }

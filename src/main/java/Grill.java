@@ -2,6 +2,8 @@ import Exeptions.Collision;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.ArrayList;
+
 public class Grill {
     Slicer slicer;
     PApplet processing;
@@ -58,12 +60,19 @@ public class Grill {
         return pixelArray;
     }
 
-    public void tryCollision(GameElement element, int x, int y) throws Collision {
+    public ArrayList<String> tryCollision(GameElement element, int x, int y) {
         int[][] collider = slicer.getSliced(element.getCollider(), x, y);
+        ArrayList<String> collisions = new ArrayList<>();
         //test chaque pixels
         for (int[] ints : collider) {
-            CollisionController.testForCollision(PApplet.hex(pixelArray[ints[0]][2]), PApplet.hex(ints[1]));
+            try {
+                CollisionController.testForCollision(PApplet.hex(pixelArray[ints[0]][2]), PApplet.hex(ints[1]));
+            } catch (Collision collision) {
+                collisions.add(collision.getType());
+            }
         }
+
+        return collisions;
     }
 
     public int getGrillWidth() {

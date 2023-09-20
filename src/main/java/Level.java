@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Level {
     private final Player player;
+    private Wolf wolf;
     PApplet processing;
     Grill grill;
     int positionX = 0;
@@ -17,6 +18,8 @@ public class Level {
 
     boolean playerIsHide = false;
     ArrayList<Integer> hidingElements;
+
+    boolean isWolfHere = false;
 
 
     public Level(PApplet processing, Grill grill, String levelName) {
@@ -61,6 +64,13 @@ public class Level {
             }
         }
 
+        //fait apparaitre le loup si le joueur parcourt 400px
+        if(positionX < 0 && !isWolfHere){
+            wolf = new Wolf(processing, grill.getGrillWidth());
+            wolf.set(true, positionX);
+            isWolfHere = true;
+        }
+
         //place le collider du player pour que les éléments puissent interagir
         grill.setCollider(player.getCollider(), player.getPositionX(), player.getPositionY());
         //ballaye tout les éléments de la liste
@@ -70,43 +80,43 @@ public class Level {
             GameElement element = elements.get(i);
             grill.setTexture(element.getTexture(), element.getPositionX(), element.getPositionY());
             //test les collisions
-            try {
-                grill.tryCollision(element, element.getPositionX(), element.getPositionY());
-            } catch (Collision collision) {
-                if(collision.getType().equals("fall") && sprites[i] == null){
+            ArrayList<String> collisions = grill.tryCollision(element, element.getPositionX(), element.getPositionY());
+
+            if (collisions.contains("fall") && sprites[i] == null) {
                     element.setLight(2);
                     sprites[i] = new Sprite("hole_1_death", processing);
                     player.kill();
-                }else if(collision.getType().equals("light") && player.isLighted() && sprites[i] == null){
-                    if(element.elementName.equals("candle_1")){
+                }
+            if (collisions.contains("light") && player.isLighted() && sprites[i] == null) {
+                    if (element.elementName.equals("candle_1")) {
                         sprites[i] = new Sprite("candle_1", processing);
                         elements.set(i, new GameElement("candle_1_on", ElementType.CANDLE, element.getPositionX(), element.getPositionY()));
-                    }else if(element.elementName.equals("candle_2")){
+                    }
+                    if (element.elementName.equals("candle_2")) {
                         sprites[i] = new Sprite("candle_2", processing);
                         elements.set(i, new GameElement("candle_2_on", ElementType.CANDLE, element.getPositionX(), element.getPositionY()));
                     }
                     elements.get(i).generate(processing);
                     elements.get(i).setLight(2);
-                }else if(collision.getType().equals("hide") && element.getPositionY() + element.getTexture().height > player.getPositionY() + player.getTexture().height){
+                    element = elements.get(i);
+                }
+            if (collisions.contains("hide") && element.getPositionY() + element.getTexture().height > player.getPositionY() + player.getTexture().height) {
                     playerIsHide = true;
                     hidingElements.add(i);
-                }
             }
 
             grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
 
-            if(element.getType() != null) {
-                if (element.getType().equals(ElementType.HOLE)) {
-                    if (sprites[i] != null && !sprites[i].isFinish())
+            if(sprites[i] != null) {
+                if(element.getType().equals(ElementType.HOLE) && sprites[i].isFinish()){
+                    end();
+                }else {
+                    if (!hidingElements.contains(i))
                         grill.setTexture(sprites[i].getPicture(false), element.getPositionX(), element.getPositionY());
-                }
-                if (element.getType().equals(ElementType.CANDLE)) {
-                    if (element.getShader() != null && !hidingElements.contains(i)) {
-                        grill.setTexture(sprites[i].getPicture(false), element.getPositionX(), element.getPositionY());
-                        grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
-                    }
+                    grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
                 }
             }
+
         }
 
         if(player.isAlive()) {
@@ -121,7 +131,18 @@ public class Level {
                 if(sprites[i] != null) grill.setTexture(sprites[i].getPicture(false), elements.get(i).getPositionX(), elements.get(i).getPositionY());
             }
             playerIsHide = false;
+            hidingElements.clear();
         }
 
+        if(isWolfHere){
+            grill.setTexture(wolf.getTexture(), wolf.getPositionX() + positionX, wolf.getPositionY());
+            grill.setShader(wolf.getShader(), wolf.getShader(), wolf.getPositionX()+ positionX, wolf.getPositionY());
+            isWolfHere = wolf.isWolfHere();
+        }
+
+    }
+
+    private void end() {
+        System.exit(1);
     }
 }

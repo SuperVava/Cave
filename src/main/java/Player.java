@@ -2,6 +2,8 @@ import Exeptions.Collision;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.ArrayList;
+
 public class Player {
     GameElement element;
     boolean isFlipped = false;
@@ -27,12 +29,12 @@ public class Player {
 
     public void move(int x, int y) {
         isWalking = true;
-        try{grill.tryCollision(element, element.getPositionX() + x, element.getPositionY() + y);}
-        catch (Collision collision){
-            System.out.println(collision.getType());
-            if(collision.getType().equals("wall")) isWalking = false;
-            if(collision.getType().equals("light")) turnOn();
+        ArrayList<String> collision = grill.tryCollision(element, element.getPositionX() + x, element.getPositionY() + y);
+        if (collision!= null) {
+            if (collision.contains("wall")) isWalking = false;
+            if (collision.contains("light")) turnOn();
         }
+
 
         if(isWalking) {
             if((element.getPositionX() < 230 || x < 0) && (element.getPositionX() > 23 || x > 0)) element.setPositionX(element.getPositionX() + x);
