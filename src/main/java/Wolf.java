@@ -24,12 +24,12 @@ public class Wolf {
         if(isFlipped)element.setPositionX(grillSize - positionX);
         else element.setPositionX(-element.getTexture().width - positionX);
 
-        element.setPositionY(50);
+        element.setPositionY(75);
     }
 
     public PImage getTexture() {
         if(element.isFlipped)element.setPositionX(element.getPositionX() - 1);
-        else element.setPositionX(element.getPositionX() +1);
+        else element.setPositionX(element.getPositionX() + 1);
         return walk.getPicture(element.isFlipped);
     }
 
@@ -48,5 +48,9 @@ public class Wolf {
         if (this.element.isFlipped && getPositionX() > -element.getTexture().width) return true;
         else if (!this.element.isFlipped && getPositionX() < grillSize) return true;
         else return false;
+    }
+
+    public PImage getCollider() {
+        return element.getCollider();
     }
 }

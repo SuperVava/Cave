@@ -15,7 +15,8 @@ public class CollisionController {
             throw new Collision("fall");
         }else if (oldType.equals(ElementType.FOOT) && newType.equals(ElementType.HOLE)) {
             throw new Collision("fall");
-        }else if (oldType.equals(ElementType.PLAYER) && (newType.equals(ElementType.CRATE) || newType.equals(ElementType.CANDLE))) {
+        }else if ((oldType.equals(ElementType.PLAYER) || oldType.equals(ElementType.WOLF)) && (newType.equals(ElementType.CRATE) || newType.equals(ElementType.CANDLE))) {
+            System.out.println(newType);
             throw new Collision("hide");
         }
     }

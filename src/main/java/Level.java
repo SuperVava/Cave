@@ -1,4 +1,3 @@
-import Exeptions.Collision;
 import processing.core.PApplet;
 
 import java.io.FileInputStream;
@@ -16,10 +15,11 @@ public class Level {
     ArrayList<GameElement> elements;
     Sprite[] sprites;
 
-    boolean playerIsHide = false;
+    boolean entitiesIsHide = false;
     ArrayList<Integer> hidingElements;
 
     boolean isWolfHere = false;
+    boolean isWolfAtRight = true;
 
 
     public Level(PApplet processing, Grill grill, String levelName) {
@@ -40,6 +40,7 @@ public class Level {
         }
 
         this.player = new Player(processing, grill, 50, 70);
+        this.wolf = new Wolf(processing, grill.getGrillWidth());
 
         for(GameElement element : elements){
             element.generate(processing);
@@ -66,28 +67,31 @@ public class Level {
 
         //fait apparaitre le loup si le joueur parcourt 400px
         if(positionX < 0 && !isWolfHere){
-            wolf = new Wolf(processing, grill.getGrillWidth());
-            wolf.set(true, positionX);
-            isWolfHere = true;
+            setWolf();
         }
 
         //place le collider du player pour que les éléments puissent interagir
         grill.setCollider(player.getCollider(), player.getPositionX(), player.getPositionY());
+        if(isWolfHere) grill.setCollider(wolf.getCollider(), wolf.getPositionX(), wolf.getPositionY());
         //ballaye tout les éléments de la liste
 
         for(int i = 0; i < elements.size(); i++){
+
             //place les éléments
             GameElement element = elements.get(i);
-            grill.setTexture(element.getTexture(), element.getPositionX(), element.getPositionY());
-            //test les collisions
-            ArrayList<String> collisions = grill.tryCollision(element, element.getPositionX(), element.getPositionY());
+            //ne traite que les éléments affichés
+            if(element.getPositionX() < grill.getGrillWidth() && element.getPositionX() + element.getTexture().width > 0 || element.getIsGlowing()){
 
-            if (collisions.contains("fall") && sprites[i] == null) {
+                grill.setTexture(element.getTexture(), element.getPositionX(), element.getPositionY());
+                //test les collisions
+                ArrayList<String> collisions = grill.tryCollision(element, element.getPositionX(), element.getPositionY());
+
+                if (collisions.contains("fall") && sprites[i] == null) {
                     element.setLight(2);
                     sprites[i] = new Sprite("hole_1_death", processing);
                     player.kill();
                 }
-            if (collisions.contains("light") && player.isLighted() && sprites[i] == null) {
+                if (collisions.contains("light") && player.isLighted() && sprites[i] == null) {
                     if (element.elementName.equals("candle_1")) {
                         sprites[i] = new Sprite("candle_1", processing);
                         elements.set(i, new GameElement("candle_1_on", ElementType.CANDLE, element.getPositionX(), element.getPositionY()));
@@ -100,20 +104,21 @@ public class Level {
                     elements.get(i).setLight(2);
                     element = elements.get(i);
                 }
-            if (collisions.contains("hide") && element.getPositionY() + element.getTexture().height > player.getPositionY() + player.getTexture().height) {
-                    playerIsHide = true;
+                if (collisions.contains("hide") && element.getPositionY() + element.getTexture().height > player.getPositionY() + player.getTexture().height) {
+                    entitiesIsHide = true;
                     hidingElements.add(i);
-            }
+                }
 
-            grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
+                grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
 
-            if(sprites[i] != null) {
-                if(element.getType().equals(ElementType.HOLE) && sprites[i].isFinish()){
-                    end();
-                }else {
-                    if (!hidingElements.contains(i))
-                        grill.setTexture(sprites[i].getPicture(false), element.getPositionX(), element.getPositionY());
-                    grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
+                if(sprites[i] != null) {
+                    if(element.getType().equals(ElementType.HOLE) && sprites[i].isFinish()){
+                        end();
+                    }else {
+                        if (!hidingElements.contains(i))
+                            grill.setTexture(sprites[i].getPicture(false), element.getPositionX(), element.getPositionY());
+                        grill.setShader(element.getShader(), element.getTexture(), element.getPositionX(), element.getPositionY());
+                    }
                 }
             }
 
@@ -125,24 +130,34 @@ public class Level {
             grill.setShader(player.getShader(), player.getTexture(), player.getPositionX(), player.getPositionY());
         }
 
-        if(playerIsHide){
+        if(isWolfHere){
+            grill.setTexture(wolf.getTexture(), wolf.getPositionX() + positionX, wolf.getPositionY());
+            grill.setShader(wolf.getShader(), wolf.getShader(), wolf.getPositionX()+ positionX, wolf.getPositionY());
+            //cache derrière le loup derrière le player si le player est devant
+            if(player.getPositionY() + player.getTexture().height > wolf.getPositionY() + wolf.getShader().height)grill.setTexture(player.getTexture(), player.getPositionX(), player.getPositionY());
+
+            isWolfHere = wolf.isWolfHere();
+        }
+
+        //cache le joueur derrière les éléments
+        if(entitiesIsHide){
             for(int i : hidingElements){
                 grill.setTexture(elements.get(i).getTexture(), elements.get(i).getPositionX(), elements.get(i).getPositionY());
                 if(sprites[i] != null) grill.setTexture(sprites[i].getPicture(false), elements.get(i).getPositionX(), elements.get(i).getPositionY());
             }
-            playerIsHide = false;
+            entitiesIsHide = false;
             hidingElements.clear();
-        }
-
-        if(isWolfHere){
-            grill.setTexture(wolf.getTexture(), wolf.getPositionX() + positionX, wolf.getPositionY());
-            grill.setShader(wolf.getShader(), wolf.getShader(), wolf.getPositionX()+ positionX, wolf.getPositionY());
-            isWolfHere = wolf.isWolfHere();
         }
 
     }
 
     private void end() {
         System.exit(1);
+    }
+
+    private void setWolf(){
+        wolf.set(isWolfAtRight, positionX);
+        isWolfHere = true;
+        isWolfAtRight = !isWolfAtRight;
     }
 }
