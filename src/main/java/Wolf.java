@@ -1,12 +1,18 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+
 public class Wolf {
 
     private final int grillSize;
     PApplet processing;
     GameElement element;
     Sprite walk;
+    Clip clip;
 
     public Wolf(PApplet processing, int grillSize) {
         this.grillSize = grillSize;
@@ -17,6 +23,18 @@ public class Wolf {
         element.flip();
         this.walk = new Sprite("wolf_walk", processing);
         walk.flip();
+
+        //on mets le roar
+        try {
+            File file = new File("Roar.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+            this.clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            System.out.println("roar!");
+        }catch (Exception exception){
+            System.out.println("Ya pas de roar!");
+            System.out.println(exception);
+        }
     }
 
     public void set(boolean isFlipped, int positionX){
@@ -52,5 +70,9 @@ public class Wolf {
 
     public PImage getCollider() {
         return element.getCollider();
+    }
+
+    public void roar(){
+        clip.start();
     }
 }

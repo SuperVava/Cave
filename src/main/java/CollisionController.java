@@ -16,8 +16,11 @@ public class CollisionController {
         }else if (oldType.equals(ElementType.FOOT) && newType.equals(ElementType.HOLE)) {
             throw new Collision("fall");
         }else if ((oldType.equals(ElementType.PLAYER) || oldType.equals(ElementType.WOLF)) && (newType.equals(ElementType.CRATE) || newType.equals(ElementType.CANDLE))) {
-            System.out.println(newType);
             throw new Collision("hide");
+        }else if (oldType.equals(ElementType.WALL) && newType.equals(ElementType.CRATE)) {
+            throw new Collision("stacked");
+        }else if (oldType.equals(ElementType.PLAYER) && newType.equals(ElementType.EXIT)) {
+            throw new Collision("finish");
         }
     }
 }

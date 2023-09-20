@@ -19,4 +19,5 @@ public class ElementType {
     public static String CANDLEOFF = "FFFF7800";
     public static String FLAME = "FFFFFA22";
     public static String WOLF = "FFFF0000";
+    public static String EXIT = "FF00FFFF";
 }

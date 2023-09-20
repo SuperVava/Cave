@@ -30,6 +30,7 @@ public class Level {
             FileInputStream loadSave = new FileInputStream(levelName);
             ObjectInputStream list = new ObjectInputStream(loadSave);
             this.elements = (ArrayList<GameElement>) list.readObject();
+            elements.add(new GameElement("EXIT", ElementType.EXIT, 0,0));
             this.sprites = new Sprite[elements.size()];
             System.out.println("Votre sauvegarde a été restaurée:");
             loadSave.close();
@@ -45,6 +46,8 @@ public class Level {
         for(GameElement element : elements){
             element.generate(processing);
         }
+        elements.get(elements.size() - 1).setPositionX(elements.get(0).getTexture().width - elements.get(elements.size() - 1).getTexture().width);
+        elements.get(elements.size() - 1).setLight("EXIT");
     }
 
     public void set(char key, boolean keyPressed) {
@@ -107,6 +110,10 @@ public class Level {
                 if (collisions.contains("hide") && element.getPositionY() + element.getTexture().height > player.getPositionY() + player.getTexture().height) {
                     entitiesIsHide = true;
                     hidingElements.add(i);
+                } else if (collisions.contains("stacked") && entitiesIsHide){
+                    hidingElements.add(i);
+                } else if (collisions.contains("finish")){
+                    end();
                 }
 
                 grill.setCollider(element.getCollider(), element.getPositionX(), element.getPositionY());
@@ -125,7 +132,7 @@ public class Level {
         }
 
         if(player.isAlive()) {
-            if(keyPressed) player.treat(key);
+            if(keyPressed && !isWolfHere) player.treat(key);
             grill.setTexture(player.getTexture(), player.getPositionX(), player.getPositionY());
             grill.setShader(player.getShader(), player.getTexture(), player.getPositionX(), player.getPositionY());
         }
@@ -148,6 +155,10 @@ public class Level {
             entitiesIsHide = false;
             hidingElements.clear();
         }
+
+        GameElement exit = elements.get(elements.size()-1);
+        grill.setTexture(exit.getTexture(), exit.getPositionX(), exit.getPositionY());
+        grill.setShader(exit.getShader(), exit.getTexture(), exit.getPositionX(), exit.getPositionY());
 
     }
 
