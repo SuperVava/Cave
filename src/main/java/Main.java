@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
+import processing.core.PSurface;
 
 public class Main extends PApplet{
 
@@ -17,12 +18,17 @@ public class Main extends PApplet{
     PImage win;
     PImage winShader;
     Sprite candleSprite;
+    Boolean isScreenFull = false;
 
     private int switcher = 0;
     private int time = 0;
     public static void main(String[] args) { PApplet.main("Main"); }
 
-    public void settings() {
+    public void settings(){
+        fullScreen();
+    }
+
+    public void setup() {
         this.screen = new Screen(this, grillWidth, grillHeigh);
         this.grill = new Grill(grillWidth, grillHeigh, this);
         this.level = new Level(this, grill);
@@ -33,8 +39,9 @@ public class Main extends PApplet{
         win = loadImage("win.png");
         winShader = loadImage("win_shader.png");
         this.candleSprite = new Sprite("candle_1", 10, this);
-        fullScreen();
         this.switcher = 1;
+        surface.setTitle("CAVE");
+        surface.setResizable(true);
     }
 
     public void draw(){
@@ -62,7 +69,7 @@ public class Main extends PApplet{
                 else switcher = 3;
                 time = millis();
             }
-        }else if(switcher == 3 && time + 3000 < millis()) this.settings();
+        }else if(switcher == 3 && time + 3000 < millis()) this.setup();
         else if(switcher == 2 && time + 1000 < millis()) switcher = 0;
 
 

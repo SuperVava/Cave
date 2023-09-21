@@ -51,7 +51,7 @@ public class Level {
             e.printStackTrace();
         }
 
-        this.player = new Player(processing, grill, 50, 70);
+        this.player = new Player(processing, grill, 100, 80);
 
         for(GameElement element : elements){
             element.generate(processing);

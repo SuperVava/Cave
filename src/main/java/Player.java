@@ -30,9 +30,9 @@ public class Player {
         walkSprite.flip();
         this.hideSprite = new Sprite("hiding",7, processing);
         hideSprite.flip();
-        hide = new GameElement("hide", ElementType.PLAYER, 0, 0);
+        hide = new GameElement("playerHide", ElementType.PLAYER, 0, 0);
         hide.generate(processing);
-        hide.setLight("hide");
+        hide.setLight("playerHide");
         element.flip();
         this.control = new Control(this);
     }

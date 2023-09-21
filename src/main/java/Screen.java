@@ -3,18 +3,14 @@ import processing.core.PConstants;
 
 public class Screen {
     private final PApplet processing;
-    private final int blackScreenBandSize;
     private final int grillHeight;
     private final int grillWidth;
-    private final int pixelSize;
+    private int pixelSize;
 
     public Screen(PApplet processing, int grillWidth, int grillHeight) {
         this.grillHeight = grillHeight;
         this.grillWidth = grillWidth;
         this.processing = processing;
-        this.pixelSize = processing.displayWidth / grillWidth;
-        this.blackScreenBandSize = (processing.displayHeight - grillHeight* getPixelSize()) / 2;
-
     }
 
     public int getPixelSize() {
@@ -22,6 +18,11 @@ public class Screen {
     }
 
     public void set(int[][] pixelArray) {
+        //set size en fonction de processing
+        this.pixelSize = Math.min(processing.displayWidth / grillWidth, processing.displayHeight / grillHeight);
+        int yGap = (processing.displayHeight - grillHeight * pixelSize) / 2;
+        int xGap = (processing.displayWidth - grillWidth * pixelSize) / 2;
+
         processing.rectMode(PConstants.CORNER);
         processing.noStroke();
         processing.colorMode(PConstants.ARGB);
@@ -29,7 +30,7 @@ public class Screen {
             for (int j = 0; j < grillWidth; j++) {
                 if(pixelArray[i*grillWidth + j][1] != 0){
                     processing.fill(pixelArray[i * grillWidth + j][0], pixelArray[i * grillWidth + j][1]);
-                    processing.rect(j * pixelSize, i * pixelSize + blackScreenBandSize, pixelSize, pixelSize);
+                    processing.rect(j * pixelSize + xGap, i * pixelSize + yGap, pixelSize, pixelSize);
                 }
             }
         }
