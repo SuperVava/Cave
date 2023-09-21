@@ -13,11 +13,11 @@ public class Wolf {
     private PApplet processing;
     private GameElement element;
     private Sprite walk;
+    private Sprite run;
     private Clip roarClip;
     private Clip attackClip;
     private int avance;
     private boolean isRunning = false;
-    private boolean isFlipped = true;
     private boolean isStopped = false;
 
     public Wolf(PApplet processing, int grillSize) {
@@ -27,12 +27,15 @@ public class Wolf {
         element.generate(processing);
         element.setLight("wolf");
         element.flip();
-        this.walk = new Sprite("wolf_walk",10, processing);
+        this.walk = new Sprite("wolf_walk",15, processing);
         walk.flip();
+        this.run = new Sprite("wolf_walk",5, processing);
+        run.flip();
+        element.setFlipped(true);
 
         //on mets le roar
         try {
-            File file = new File("roar.mp3");
+            File file = new File("roar.wav");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
             this.roarClip = AudioSystem.getClip();
             roarClip.open(audioStream);
@@ -52,38 +55,37 @@ public class Wolf {
         }
     }
 
-    public void set(int positionX, boolean isPlayerHide, boolean isPlayerFlipped, ArrayList<Integer> freeWays, int playerPositionY){
+    public void set(boolean isPlayerHide, boolean isPlayerFlipped, ArrayList<Integer> freeWays, int playerPositionY){
         isStopped = false;
-        element.setFlipped(isFlipped);
-        if(isFlipped)element.setPositionX(grillSize - positionX);
-        else element.setPositionX(-element.getTexture().width - positionX);
+        if(element.isFlipped)element.setPositionX(grillSize);
+        else element.setPositionX(-element.getTexture().width);
 
-        if(isPlayerHide && isPlayerFlipped != isFlipped) {
-            int max = freeWays.size();
-            int min = 1;
-            int range = max - min + 1;
-            int way = (int) (Math.random() * range) + min;
+        if(isPlayerHide && isPlayerFlipped != element.isFlipped) {
+            int way = (int) (Math.random() * freeWays.size());
             if(freeWays.size() == 0) element.setPositionY(100);
             else element.setPositionY(freeWays.get(way) - element.getTexture().height);
             isRunning = false;
-            System.out.println("pas vu, pas pris!");
         }else{
             element.setPositionY(playerPositionY - 20);
             isRunning = true;
-            System.out.println("VU!");
+            attackClip.start();
         }
     }
 
     public PImage getTexture() {
+        if(isStopped) return element.getTexture();
+        else if(isRunning) return run.getPicture(element.isFlipped);
+        else return walk.getPicture(element.isFlipped);
+    }
+
+    public void update(){
         //gère l'avance
-        if(isRunning) avance = 5;
+        if(isRunning) avance = 5 ;
         else avance = 1;
 
-        if(isStopped) return element.getTexture();
-        else {
+        if(!isStopped) {
             if (element.isFlipped) element.setPositionX(element.getPositionX() - avance);
             else element.setPositionX(element.getPositionX() + avance);
-            return walk.getPicture(element.isFlipped);
         }
     }
 
@@ -103,7 +105,7 @@ public class Wolf {
         else if (!this.element.isFlipped && getPositionX() < grillSize) return true;
         else{
             isRunning = false;
-            isFlipped = !isFlipped;
+            element.isFlipped = !element.isFlipped;
             return false;
         }
     }
@@ -113,6 +115,8 @@ public class Wolf {
     }
 
     public void roar(){
+        System.out.println("roar");
+        roarClip.setMicrosecondPosition(1000000);
         roarClip.start();
     }
 
@@ -123,5 +127,9 @@ public class Wolf {
     public void stop() {
         isStopped = true;
         element.setLight(0);
+    }
+
+    public boolean isFlipped() {
+        return element.isFlipped;
     }
 }

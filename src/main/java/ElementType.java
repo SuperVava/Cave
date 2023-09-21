@@ -21,5 +21,5 @@ public class ElementType {
     public static String FLAME = "FFFFFA22";
     public static String WOLF = "FFFF0000";
     public static String EXIT = "FF00FFFF";
-    public static String PLAYER_LOW = "FF7D7D7D";
+    public static String ENTITY_LOW = "FF7D7D7D";
 }

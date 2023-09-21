@@ -15,13 +15,13 @@ public class CollisionController {
             throw new Collision("fall");
         }else if (oldType.equals(ElementType.FOOT) && newType.equals(ElementType.HOLE)) {
             throw new Collision("fall");
-        }else if ((oldType.equals(ElementType.PLAYER_LOW) || oldType.equals(ElementType.WOLF)) && newType.equals(ElementType.HIDE)) {
+        }else if (oldType.equals(ElementType.ENTITY_LOW) && newType.equals(ElementType.HIDE)) {
             throw new Collision("hide");
         }else if (oldType.equals(ElementType.CRATE) && newType.equals(ElementType.HIDE)) {
             throw new Collision("stacked");
         }else if (oldType.equals(ElementType.PLAYER) && newType.equals(ElementType.EXIT)) {
             throw new Collision("finish");
-        }else if(oldType.equals(ElementType.CRATE) && newType.equals(ElementType.PLAYER_LOW)){
+        }else if(oldType.equals(ElementType.CRATE) && newType.equals(ElementType.ENTITY_LOW)){
             throw new Collision("canHideLow");
         }else if(oldType.equals(ElementType.PLAYER) && newType.equals(ElementType.WOLF)){
             throw new Collision("kill");

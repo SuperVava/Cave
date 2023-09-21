@@ -7,7 +7,6 @@ public class Player {
     private GameElement stand;
     private GameElement hide;
     private GameElement element;
-    private boolean isFlipped = false;
     private Sprite walkSprite;
     private Sprite hideSprite;
     private boolean isWalking = false;
@@ -55,17 +54,14 @@ public class Player {
         if(isWalking) {
             element.setPositionX(element.getPositionX() + x);
             element.setPositionY(element.getPositionY() + y);
-            if (x < 0) isFlipped = true;
-            if (x > 0) isFlipped = false;
         }
     }
 
     public PImage getTexture() {
-        element.setFlipped(isFlipped);
         PImage currentPosition;
         if(isHiding){
             currentPosition = showHidingPosition();
-        }else if(isWalking) currentPosition= walkSprite.getPicture(isFlipped);
+        }else if(isWalking) currentPosition= walkSprite.getPicture(element.isFlipped);
         else currentPosition = element.getTexture();
 
         isWalking = false;
@@ -78,7 +74,8 @@ public class Player {
     }
 
     public PImage getCollider() {
-        return element.getCollider();
+        if(isHide) return hide.getCollider();
+        else return element.getCollider();
     }
 
 
@@ -100,12 +97,12 @@ public class Player {
     }
 
     private PImage showHidingPosition() {
-        if(!hideSprite.isFinish() && !isHide) return hideSprite.getPicture(isFlipped);
+        if(!hideSprite.isFinish() && !isHide) return hideSprite.getPicture(element.isFlipped);
         else {
             stand.setLight("player");
             isLighted = false;
             isHide = true;
-            hide.setFlipped(isFlipped);
+            hide.setFlipped(element.isFlipped);
             return hide.getTexture();
         }
     }
@@ -129,12 +126,16 @@ public class Player {
         return isHide;
     }
 
-    public void setHide(boolean hide) {
-        isHide = hide;
+    public boolean isFlipped() {
+        return element.isFlipped;
     }
 
-    public boolean isFlipped() {
-        return isFlipped;
+    public void lookRight(){
+        element.setFlipped(false);
+    }
+
+    public void lookLeft() {
+        element.setFlipped(true);
     }
 
     public void kill(){

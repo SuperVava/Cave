@@ -10,12 +10,14 @@ public class Control {
         }
         if(key == 'q'){
             player.move(-1, 0);
+            player.lookLeft();
         }
         if(key == 's'){
             player.move(0, +1);
         }
         if(key == 'd'){
             player.move(+1, 0);
+            player.lookRight();
         }
         if(key == ' ' && canHide){
             player.hide();

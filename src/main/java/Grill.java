@@ -1,5 +1,6 @@
 import Exeptions.Collision;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 import java.util.ArrayList;
@@ -79,11 +80,13 @@ public class Grill {
         //ajoute une collection représentant une seule voie
         ArrayList<Boolean> way = new ArrayList<Boolean>(grillHeight);
 
-        for(int i = 0; i < grillHeight; i++){
+        for(int i = 1; i < grillHeight; i++){
             for(int j =0; j< grillWidth; j++){
-                way.add(pixelArray[i*grillWidth + j][2] == 0 || pixelArray[i*grillWidth + j][2] == PApplet.unhex(ElementType.PLAYER));
+                String collider = PApplet.hex(pixelArray[i * grillWidth + j][2]);
+                way.add(collider.equals(ElementType.WALL) || collider.equals(ElementType.PLAYER) || collider.equals(ElementType.CRATE) || collider.equals(ElementType.HOLE));
             }
             if(!way.contains(true)) freeWays.add(i);
+            way.clear();
         }
         return freeWays;
     }
