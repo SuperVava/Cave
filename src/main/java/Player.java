@@ -1,43 +1,59 @@
-import Exeptions.Collision;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.util.ArrayList;
 
 public class Player {
-    GameElement element;
-    boolean isFlipped = false;
-    Sprite walkSprite;
-    boolean isWalking = false;
-    Grill grill;
-    Control control;
+    private GameElement stand;
+    private GameElement hide;
+    private GameElement element;
+    private boolean isFlipped = false;
+    private Sprite walkSprite;
+    private Sprite hideSprite;
+    private boolean isWalking = false;
+    private final Grill grill;
+    private final Control control;
     private boolean isAlive = true;
-    boolean isLighted;
+    private boolean isLighted;
+    private boolean canHide = false;
+    private boolean isHiding = false;
+    private boolean isHide = false;
 
     public Player(PApplet processing, Grill grill, int positionX, int positionY) {
         this.grill = grill;
-        this.element = new GameElement("player", ElementType.PLAYER, positionX, positionY);
+        this.stand = new GameElement("player", ElementType.PLAYER, positionX, positionY);
+        element = stand;
         element.generate(processing);
         element.setLight(2);
         isLighted = true;
         element.flip();
-        this.walkSprite = new Sprite("player_walk", processing);
+        this.walkSprite = new Sprite("player_walk",5, processing);
         walkSprite.flip();
+        this.hideSprite = new Sprite("hiding",7, processing);
+        hideSprite.flip();
+        hide = new GameElement("hide", ElementType.PLAYER, 0, 0);
+        hide.generate(processing);
+        hide.setLight("hide");
+        element.flip();
         this.control = new Control(this);
     }
 
 
     public void move(int x, int y) {
         isWalking = true;
+        canHide = false;
         ArrayList<String> collision = grill.tryCollision(element, element.getPositionX() + x, element.getPositionY() + y);
         if (collision!= null) {
             if (collision.contains("wall")) isWalking = false;
             if (collision.contains("light")) turnOn();
+            if (collision.contains("canHideLow")){
+                canHide = true;
+            }
         }
 
 
         if(isWalking) {
-            if((element.getPositionX() < 230 || x < 0) && (element.getPositionX() > 23 || x > 0)) element.setPositionX(element.getPositionX() + x);
+            element.setPositionX(element.getPositionX() + x);
             element.setPositionY(element.getPositionY() + y);
             if (x < 0) isFlipped = true;
             if (x > 0) isFlipped = false;
@@ -47,7 +63,9 @@ public class Player {
     public PImage getTexture() {
         element.setFlipped(isFlipped);
         PImage currentPosition;
-        if(isWalking) currentPosition= walkSprite.getPicture(isFlipped);
+        if(isHiding){
+            currentPosition = showHidingPosition();
+        }else if(isWalking) currentPosition= walkSprite.getPicture(isFlipped);
         else currentPosition = element.getTexture();
 
         isWalking = false;
@@ -55,7 +73,8 @@ public class Player {
     }
 
     public PImage getShader() {
-        return element.getShader();
+        if(isHide) return hide.getShader();
+        else return element.getShader();
     }
 
     public PImage getCollider() {
@@ -64,22 +83,37 @@ public class Player {
 
 
     public int getPositionX() {
-        return element.getPositionX();
+        if(isHide) return hide.getPositionX();
+        else return element.getPositionX();
     }
 
     public int getPositionY() {
+        if(isHide) return hide.getPositionY();
         return element.getPositionY();
     }
 
-
-
-    public void treat(char key) {
-        control.treat(key);
+    public void hide(){
+        hideSprite.restart();
+        isHiding = true;
+        hide.setPositionX(stand.getPositionX());
+        hide.setPositionY(stand.getPositionY() + 7);
     }
 
-    public void turnOff(){
-        element.setLight("player");
-        isLighted = false;
+    private PImage showHidingPosition() {
+        if(!hideSprite.isFinish() && !isHide) return hideSprite.getPicture(isFlipped);
+        else {
+            stand.setLight("player");
+            isLighted = false;
+            isHide = true;
+            hide.setFlipped(isFlipped);
+            return hide.getTexture();
+        }
+    }
+
+    public void treat(char key) {
+        isHiding = false;
+        isHide = false;
+        control.treat(key, canHide);
     }
 
     public void turnOn(){
@@ -89,6 +123,18 @@ public class Player {
 
     public boolean isLighted() {
         return isLighted;
+    }
+
+    public boolean isHide() {
+        return isHide;
+    }
+
+    public void setHide(boolean hide) {
+        isHide = hide;
+    }
+
+    public boolean isFlipped() {
+        return isFlipped;
     }
 
     public void kill(){

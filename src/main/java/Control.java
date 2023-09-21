@@ -4,7 +4,7 @@ public class Control {
         this.player = player;
     }
 
-    public void treat(char key){
+    public void treat(char key, boolean canHide){
         if(key == 'z'){
             player.move(0, -1);
         }
@@ -17,8 +17,8 @@ public class Control {
         if(key == 'd'){
             player.move(+1, 0);
         }
-        if(key == ' '){
-            player.turnOff();
+        if(key == ' ' && canHide){
+            player.hide();
         }
     }
 }

@@ -2,11 +2,11 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 
 public class Screen {
-    PApplet processing;
-    int blackScreenBandSize;
-    int grillHeight;
-    int grillWidth;
-    int pixelSize;
+    private final PApplet processing;
+    private final int blackScreenBandSize;
+    private final int grillHeight;
+    private final int grillWidth;
+    private final int pixelSize;
 
     public Screen(PApplet processing, int grillWidth, int grillHeight) {
         this.grillHeight = grillHeight;
@@ -21,15 +21,18 @@ public class Screen {
         return pixelSize;
     }
 
-    public void draw(int[][] pixelArray) {
+    public void set(int[][] pixelArray) {
         processing.rectMode(PConstants.CORNER);
         processing.noStroke();
         processing.colorMode(PConstants.ARGB);
         for (int i = 0; i < grillHeight; i++) {
             for (int j = 0; j < grillWidth; j++) {
-                processing.fill(pixelArray[i*grillWidth + j][0], pixelArray[i*grillWidth + j][1]);
-                processing.rect(j * pixelSize, i * pixelSize + blackScreenBandSize, pixelSize, pixelSize);
+                if(pixelArray[i*grillWidth + j][1] != 0){
+                    processing.fill(pixelArray[i * grillWidth + j][0], pixelArray[i * grillWidth + j][1]);
+                    processing.rect(j * pixelSize, i * pixelSize + blackScreenBandSize, pixelSize, pixelSize);
+                }
             }
         }
+        processing.colorMode(PConstants.RGB);
     }
 }

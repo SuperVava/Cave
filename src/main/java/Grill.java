@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Grill {
     Slicer slicer;
-    PApplet processing;
+    private final PApplet processing;
     int grillWidth;
     int grillHeight;
     int[][] pixelArray;
@@ -29,8 +29,6 @@ public class Grill {
         for (int[] ints : texture) {
             pixelArray[ints[0]][0] = ints[1];
         }
-
-
         }
 
     public void setShader(PImage shaderPicture, PImage texture, int x, int y) {
@@ -75,10 +73,26 @@ public class Grill {
         return collisions;
     }
 
+    public ArrayList<Integer> getFreeWay(){
+        //ajoute une collection de voies libres
+        ArrayList<Integer> freeWays = new ArrayList<Integer>();
+        //ajoute une collection représentant une seule voie
+        ArrayList<Boolean> way = new ArrayList<Boolean>(grillHeight);
+
+        for(int i = 0; i < grillHeight; i++){
+            for(int j =0; j< grillWidth; j++){
+                way.add(pixelArray[i*grillWidth + j][2] == 0 || pixelArray[i*grillWidth + j][2] == PApplet.unhex(ElementType.PLAYER));
+            }
+            if(!way.contains(true)) freeWays.add(i);
+        }
+        return freeWays;
+    }
+
     public int getGrillWidth() {
         return grillWidth;
     }
 
+    public void clearTextures() {for(int[] ints : pixelArray) ints[0] = 0;}
     public void clearLight(){
         for(int[] ints : pixelArray) ints[1] = 0;
     }

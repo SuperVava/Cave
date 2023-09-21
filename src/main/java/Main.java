@@ -10,31 +10,34 @@ public class Main extends PApplet{
 
     private Text text;
 
-    boolean isGameStarted;
-
-    int i = 0;
     public static void main(String[] args) { PApplet.main("Main"); }
 
     public void settings() {
         this.text = new Text(this);
         this.screen = new Screen(this, grillWidth, grillHeigh);
         this.grill = new Grill(grillWidth, grillHeigh, this);
-        this.level = new Level(this, grill, "level_1");
+        this.level = new Level(this, grill);
         fullScreen();
-        isGameStarted = false;
     }
 
     public void draw(){
-        background(0);
-        if(!isGameStarted && key == ' ') isGameStarted = true;
-        else if (isGameStarted) {
+        background(0, 255);
+        if(!level.isGameOn() && key == ' ' && keyPressed){
+            level.start("level_1");
+            key = 'p';
+        }
+        else if (level.isGameOn()) {
             grill.clearLight();
+            level.set(key, keyPressed, second());
+            screen.set(grill.getPixelArray());
 
-            level.set(key, keyPressed);
-
-            screen.draw(grill.getPixelArray());
+            if(!level.isGameOn()){
+                clear();
+                this.settings();
+            }
         }
         else{
+            fill(200, 196, 12);
             this.text.write("Press SPACE to start...", width/2, 4 * (height/5), 30);
         }
     }

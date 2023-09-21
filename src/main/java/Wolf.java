@@ -5,14 +5,20 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Wolf {
 
     private final int grillSize;
-    PApplet processing;
-    GameElement element;
-    Sprite walk;
-    Clip clip;
+    private PApplet processing;
+    private GameElement element;
+    private Sprite walk;
+    private Clip roarClip;
+    private Clip attackClip;
+    private int avance;
+    private boolean isRunning = false;
+    private boolean isFlipped = true;
+    private boolean isStopped = false;
 
     public Wolf(PApplet processing, int grillSize) {
         this.grillSize = grillSize;
@@ -21,34 +27,64 @@ public class Wolf {
         element.generate(processing);
         element.setLight("wolf");
         element.flip();
-        this.walk = new Sprite("wolf_walk", processing);
+        this.walk = new Sprite("wolf_walk",10, processing);
         walk.flip();
 
         //on mets le roar
         try {
-            File file = new File("Roar.wav");
+            File file = new File("roar.mp3");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-            this.clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            System.out.println("roar!");
+            this.roarClip = AudioSystem.getClip();
+            roarClip.open(audioStream);
         }catch (Exception exception){
             System.out.println("Ya pas de roar!");
             System.out.println(exception);
         }
+        //on mets le bouffer
+        try {
+            File file = new File("attack.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+            this.attackClip = AudioSystem.getClip();
+            attackClip.open(audioStream);
+        }catch (Exception exception){
+            System.out.println("Ya pas de groRROAAAR!");
+            System.out.println(exception);
+        }
     }
 
-    public void set(boolean isFlipped, int positionX){
+    public void set(int positionX, boolean isPlayerHide, boolean isPlayerFlipped, ArrayList<Integer> freeWays, int playerPositionY){
+        isStopped = false;
         element.setFlipped(isFlipped);
         if(isFlipped)element.setPositionX(grillSize - positionX);
         else element.setPositionX(-element.getTexture().width - positionX);
 
-        element.setPositionY(75);
+        if(isPlayerHide && isPlayerFlipped != isFlipped) {
+            int max = freeWays.size();
+            int min = 1;
+            int range = max - min + 1;
+            int way = (int) (Math.random() * range) + min;
+            if(freeWays.size() == 0) element.setPositionY(100);
+            else element.setPositionY(freeWays.get(way) - element.getTexture().height);
+            isRunning = false;
+            System.out.println("pas vu, pas pris!");
+        }else{
+            element.setPositionY(playerPositionY - 20);
+            isRunning = true;
+            System.out.println("VU!");
+        }
     }
 
     public PImage getTexture() {
-        if(element.isFlipped)element.setPositionX(element.getPositionX() - 1);
-        else element.setPositionX(element.getPositionX() + 1);
-        return walk.getPicture(element.isFlipped);
+        //gère l'avance
+        if(isRunning) avance = 5;
+        else avance = 1;
+
+        if(isStopped) return element.getTexture();
+        else {
+            if (element.isFlipped) element.setPositionX(element.getPositionX() - avance);
+            else element.setPositionX(element.getPositionX() + avance);
+            return walk.getPicture(element.isFlipped);
+        }
     }
 
     public int getPositionX() {
@@ -65,7 +101,11 @@ public class Wolf {
     public boolean isWolfHere() {
         if (this.element.isFlipped && getPositionX() > -element.getTexture().width) return true;
         else if (!this.element.isFlipped && getPositionX() < grillSize) return true;
-        else return false;
+        else{
+            isRunning = false;
+            isFlipped = !isFlipped;
+            return false;
+        }
     }
 
     public PImage getCollider() {
@@ -73,6 +113,15 @@ public class Wolf {
     }
 
     public void roar(){
-        clip.start();
+        roarClip.start();
+    }
+
+    public GameElement getElement() {
+        return element;
+    }
+
+    public void stop() {
+        isStopped = true;
+        element.setLight(0);
     }
 }

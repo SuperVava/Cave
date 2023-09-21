@@ -8,9 +8,11 @@ public class Sprite {
     PApplet processing;
     int counter = 0;
     int frame = 0;
+    private int changeFrameEach;
 
-    public Sprite(String name, PApplet processing) {
+    public Sprite(String name, int changeFrameEach, PApplet processing) {
         this.processing = processing;
+        this.changeFrameEach = changeFrameEach;
         PImage texture = processing.loadImage(name + "_sprite.png");
         int numberOfFrame = texture.width / texture.height;
         frames = new PImage[numberOfFrame];
@@ -45,7 +47,7 @@ public class Sprite {
 
     public PImage getPicture(boolean isFlipped) {
         counter +=1;
-        frame = counter / 10;
+        frame = counter / changeFrameEach;
         if(frame >= frames.length){
             counter = 0;
             frame = 0;
@@ -55,6 +57,11 @@ public class Sprite {
     }
 
     public boolean isFinish() {
-        return frames.length == (counter+1) / 10;
+        return frames.length == (counter+1) / changeFrameEach;
+    }
+
+    public void restart(){
+        frame = 0;
+        counter = 0;
     }
 }
